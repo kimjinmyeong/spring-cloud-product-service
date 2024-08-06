@@ -27,50 +27,57 @@ public class JwtAuthenticationFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        String path = request.getURI().getPath();
+
+        log.info("Received request for path: {}", path);
 
         // Allow requests to /auth/** without authentication
-        String path = exchange.getRequest().getURI().getPath();
         if (path.startsWith("/auth")) {
+            log.info("Path {} is allowed without authentication", path);
             return chain.filter(exchange);
         }
 
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secretKey));
 
-        // Extract Token.
+        // Extract Token
         String authorizationHeader = request.getHeaders().getFirst("Authorization");
         if (!extractToken(authorizationHeader)) {
+            log.warn("Missing or invalid Authorization header for path: {}", path);
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
 
-        // Validate Token.
-        if (!validateToken(exchange, authorizationHeader, key)) {
+        // Validate Token
+        if (!validateToken(authorizationHeader, key)) {
+            log.warn("Token validation failed for path: {}", path);
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
+
+        log.info("Token validated successfully for path: {}", path);
         return chain.filter(exchange);
     }
 
     private boolean extractToken(String authorizationHeader) {
-        return authorizationHeader != null && authorizationHeader.startsWith("Bearer ");
+        boolean valid = authorizationHeader != null && authorizationHeader.startsWith("Bearer ");
+        if (valid) {
+            log.debug("Extracted token from Authorization header");
+        } else {
+            log.debug("Failed to extract token from Authorization header");
+        }
+        return valid;
     }
 
-    private boolean validateToken(ServerWebExchange exchange, String authorizationHeader, SecretKey key) {
+    private boolean validateToken(String authorizationHeader, SecretKey key) {
         try {
             String token = authorizationHeader.substring(7);
             Jws<Claims> jwsClaims = Jwts.parser()
                     .verifyWith(key)
                     .build().parseSignedClaims(token);
-
-            Claims claims = jwsClaims.getPayload();
-            exchange.getRequest().mutate()
-                    .header("X-User-Id", claims.get("user_id").toString())
-                    .header("X-Role", claims.get("role").toString())
-                    .build();
             return true;
         } catch (Exception e) {
+            log.error("Exception during token validation: {}", e.getMessage(), e);
             return false;
         }
     }
 }
-
