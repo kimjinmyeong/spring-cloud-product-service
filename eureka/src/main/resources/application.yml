@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: eureka-server
+
+server:
+  port: 19090
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false # This server will not register itself with Eureka
+    fetchRegistry: false      # This server doesn't need to fetch registry
+
+  server:
+    waitTimeInMsWhenSyncEmpty: 0 # No wait time when registry is empty
