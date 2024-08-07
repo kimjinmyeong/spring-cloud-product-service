@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.product;
+package com.sparta.msa_exam;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-public class ProductApplication {
+public class OrderApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProductApplication.class, args);
+		SpringApplication.run(OrderApplication.class, args);
 	}
 
 }
