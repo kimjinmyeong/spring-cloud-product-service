@@ -5,6 +5,19 @@ spring:
     name: gateway
   cloud:
     gateway:
+      routes:
+        - id: order
+          uri: lb://order
+          predicates:
+            - Path=/order/**
+        - id: product
+          uri: lb://product
+          predicates:
+            - Path=/product/**
+        - id: auth
+          uri: lb://auth
+          predicates:
+            - Path=/auth/signIn
       discovery:
         locator:
           enabled: true
