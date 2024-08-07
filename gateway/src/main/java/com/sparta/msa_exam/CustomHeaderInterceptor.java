@@ -1,21 +1,22 @@
 package com.sparta.msa_exam;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 @Component
-public class CustomHeaderInterceptor implements WebFilter {
-
-    @Value("${server.port}")
-    private String port;
+public class CustomHeaderInterceptor implements GlobalFilter {
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        exchange.getResponse().getHeaders().add("Server-Port", port);
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        HttpHeaders headers = exchange.getResponse().getHeaders();
+        String backendServerPort = exchange.getResponse().getHeaders().getFirst("Server-Port");
+        if (backendServerPort != null) {
+            headers.add("Server-Port", backendServerPort);
+        }
         return chain.filter(exchange);
     }
 }
