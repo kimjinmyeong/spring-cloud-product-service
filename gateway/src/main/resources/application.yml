@@ -2,7 +2,7 @@ spring:
   main:
     web-application-type: reactive
   application:
-    name: eureka-gateway
+    name: gateway
   cloud:
     gateway:
       discovery:
