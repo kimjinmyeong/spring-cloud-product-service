@@ -1,0 +1,269 @@
+{
+  "version": 6,
+  "entities": [
+    {
+      "entity": {
+        "type": "Project",
+        "id": "8ba4677a-2f0f-4f96-acf7-1e1c0fcdd2c1",
+        "name": "Spring-MSA"
+      },
+      "children": [
+        {
+          "entity": {
+            "type": "Request",
+            "method": {
+              "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+              "name": "GET"
+            },
+            "body": {
+              "formBody": {
+                "overrideContentType": true,
+                "encoding": "application/x-www-form-urlencoded",
+                "items": []
+              },
+              "bodyType": "Text"
+            },
+            "uri": {
+              "query": {
+                "delimiter": "&",
+                "items": [
+                  {
+                    "enabled": true,
+                    "name": "user_id",
+                    "value": "1"
+                  }
+                ]
+              },
+              "scheme": {
+                "name": "http",
+                "version": "V11"
+              },
+              "host": "localhost:19091",
+              "path": "/auth/signIn"
+            },
+            "id": "b5b8b2bd-5834-49c5-8940-44bf9280177c",
+            "name": "Auth - SignIn",
+            "headers": [
+              {
+                "enabled": true,
+                "name": "Authorization",
+                "value": "Bearer "
+              }
+            ]
+          }
+        },
+        {
+          "entity": {
+            "type": "Request",
+            "method": {
+              "requestBody": true,
+              "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+              "name": "POST"
+            },
+            "body": {
+              "formBody": {
+                "overrideContentType": true,
+                "encoding": "application/x-www-form-urlencoded",
+                "items": []
+              },
+              "bodyType": "Text",
+              "textBody": "{\n  \"orderName\": \"testOrderName\",\n  \"productIds\": [1, 2]\n}"
+            },
+            "uri": {
+              "query": {
+                "delimiter": "&",
+                "items": []
+              },
+              "scheme": {
+                "name": "http",
+                "version": "V11"
+              },
+              "host": "localhost:19091",
+              "path": "/order"
+            },
+            "id": "5a60fdcd-1752-47d4-bfd8-3a7e66a53722",
+            "name": "Order - create",
+            "headers": [
+              {
+                "enabled": true,
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "enabled": true,
+                "name": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxMDU5MjQsImV4cCI6MTcyMzEwOTUyNH0.g-qubkkHIrhFRTYhNHhWiu2o4HpdH5y1tfyCW_T0AXa3wHFFLJix2FyT9JeRrq9Hc1H6Pw44eOein84Rgc2ZSw"
+              }
+            ]
+          }
+        },
+        {
+          "entity": {
+            "type": "Request",
+            "method": {
+              "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+              "name": "GET"
+            },
+            "body": {
+              "formBody": {
+                "overrideContentType": true,
+                "encoding": "application/x-www-form-urlencoded",
+                "items": []
+              },
+              "bodyType": "Text"
+            },
+            "uri": {
+              "query": {
+                "delimiter": "&",
+                "items": []
+              },
+              "scheme": {
+                "name": "http",
+                "version": "V11"
+              },
+              "host": "localhost:19091",
+              "path": "/order/1"
+            },
+            "id": "86344711-d0b4-4125-b1e6-d25e48d627f3",
+            "name": "Order - get",
+            "headers": [
+              {
+                "enabled": true,
+                "name": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxMDU5MjQsImV4cCI6MTcyMzEwOTUyNH0.g-qubkkHIrhFRTYhNHhWiu2o4HpdH5y1tfyCW_T0AXa3wHFFLJix2FyT9JeRrq9Hc1H6Pw44eOein84Rgc2ZSw"
+              }
+            ]
+          }
+        },
+        {
+          "entity": {
+            "type": "Request",
+            "method": {
+              "requestBody": true,
+              "link": "http://tools.ietf.org/html/rfc7231#section-4.3.4",
+              "name": "PUT"
+            },
+            "body": {
+              "formBody": {
+                "overrideContentType": true,
+                "encoding": "application/x-www-form-urlencoded",
+                "items": []
+              },
+              "bodyType": "Text",
+              "textBody": "{\n \t \"product_id\" : 52\n}"
+            },
+            "uri": {
+              "query": {
+                "delimiter": "&",
+                "items": []
+              },
+              "scheme": {
+                "name": "http",
+                "version": "V11"
+              },
+              "host": "localhost:19091",
+              "path": "/order/1"
+            },
+            "id": "d6def30a-dcc9-48a8-8591-38c6f3d4a56d",
+            "name": "Order - put",
+            "headers": [
+              {
+                "enabled": true,
+                "name": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxMDU5MjQsImV4cCI6MTcyMzEwOTUyNH0.g-qubkkHIrhFRTYhNHhWiu2o4HpdH5y1tfyCW_T0AXa3wHFFLJix2FyT9JeRrq9Hc1H6Pw44eOein84Rgc2ZSw"
+              },
+              {
+                "enabled": true,
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "entity": {
+            "type": "Request",
+            "method": {
+              "requestBody": true,
+              "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+              "name": "POST"
+            },
+            "body": {
+              "formBody": {
+                "overrideContentType": true,
+                "encoding": "application/x-www-form-urlencoded",
+                "items": []
+              },
+              "bodyType": "Text",
+              "textBody": "{\n  \"productName\": \"exampleProductName\",\n  \"supplyPrice\": 500\n}\n"
+            },
+            "uri": {
+              "query": {
+                "delimiter": "&",
+                "items": []
+              },
+              "scheme": {
+                "name": "http",
+                "version": "V11"
+              },
+              "host": "localhost:19091",
+              "path": "/products"
+            },
+            "id": "d268cf02-57d5-4fbc-b29b-96ece25ba256",
+            "name": "Product - add",
+            "headers": [
+              {
+                "enabled": true,
+                "name": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxMDU5MjQsImV4cCI6MTcyMzEwOTUyNH0.g-qubkkHIrhFRTYhNHhWiu2o4HpdH5y1tfyCW_T0AXa3wHFFLJix2FyT9JeRrq9Hc1H6Pw44eOein84Rgc2ZSw"
+              },
+              {
+                "enabled": true,
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "entity": {
+            "type": "Request",
+            "method": {
+              "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+              "name": "GET"
+            },
+            "body": {
+              "formBody": {
+                "overrideContentType": true,
+                "encoding": "application/x-www-form-urlencoded",
+                "items": []
+              },
+              "bodyType": "Text"
+            },
+            "uri": {
+              "query": {
+                "delimiter": "&",
+                "items": []
+              },
+              "scheme": {
+                "name": "http",
+                "version": "V11"
+              },
+              "host": "localhost:19091",
+              "path": "/products"
+            },
+            "id": "f885cfea-9394-4793-842c-68a5090c6ab4",
+            "name": "Product - get",
+            "headers": [
+              {
+                "enabled": true,
+                "name": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxMDU5MjQsImV4cCI6MTcyMzEwOTUyNH0.g-qubkkHIrhFRTYhNHhWiu2o4HpdH5y1tfyCW_T0AXa3wHFFLJix2FyT9JeRrq9Hc1H6Pw44eOein84Rgc2ZSw"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
