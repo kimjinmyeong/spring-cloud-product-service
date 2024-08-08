@@ -26,6 +26,13 @@ services:
       - redis_data:/bitnami/redis
     networks:
       - app_network
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: product_zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - app_network
 
 volumes:
   postgresql_data:
