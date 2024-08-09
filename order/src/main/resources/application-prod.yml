@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: order
+  datasource:
+    url: jdbc:mysql://prod-database-server:3306/product_db
+    username:
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  data:
+    redis:
+      host: redis-server-example
+      port: 6379
+      password:
+
+server:
+  port: 19092
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-prod-server:19090/eureka/
+
+management:
+  zipkin:
+    tracing:
+      endpoint: "http://zipkin-prod-server:9411/api/v2/spans"
+  tracing:
+    sampling:
+      probability: 0.1
+
+service:
+  jwt:
+    secret-key: "${JWT_SECRET_KEY}"

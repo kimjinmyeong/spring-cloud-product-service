@@ -10,8 +10,9 @@ import com.sparta.msa_exam.repository.OrderRepository;
 import com.sparta.msa_exam.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,21 +25,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-    private final ProductClient productClient;
     private final OrderRepository orderRepository;
     private final OrderProductRepository orderProductRepository;
 
     @Transactional
     @Override
-    public String createOrder(String token, String orderName, List<Long> productRequestIds) {
+    public OrderResponseDto createOrder(List<ProductDto> products, String token, String orderName, List<Long> productRequestIds) {
         log.info("Creating order with name: {} and products: {}", orderName, productRequestIds);
-
-        ResponseEntity<List<ProductDto>> clientResponseEntity = productClient.getProducts(token);
-        String clientPort = clientResponseEntity.getHeaders().get("Server-Port").get(0);
-
-        List<ProductDto> productDtoList = clientResponseEntity.getBody();
-        log.debug("Retrieved {} products from product client.", productDtoList.size());
-        validateProductDtoList(productRequestIds, productDtoList);
+        log.debug("Retrieved {} products from product client.", products.size());
+        validateProductDtoList(productRequestIds, products);
 
         Order order = Order.builder()
                 .orderName(orderName)
@@ -54,54 +49,44 @@ public class OrderServiceImpl implements OrderService {
                     .build();
             orderProductList.add(orderProduct);
         }
-        List<OrderProduct> savedOrderProductList = orderProductRepository.saveAll(orderProductList);
-
-        savedOrder.setProducts(savedOrderProductList);
-        orderRepository.save(savedOrder);
+        List<OrderProduct> createdOrderProductList = createOrderProduct(savedOrder, productRequestIds);
+        savedOrder.setProducts(createdOrderProductList);
+        Order updatedOrder = orderRepository.save(savedOrder);
         log.info("Order updated with products. Total products in order: {}", savedOrder.getProducts().size());
-
-        return clientPort;
+        return createOrderResponseDto(updatedOrder);
     }
 
     @Transactional
+    @CachePut(value = "orders", key = "#result.getOrderId()")
     @Override
-    public String addProductToOrder(String token, Long orderId, Long productId) {
+    public OrderResponseDto addProductToOrder(List<ProductDto> products, String token, Long orderId, Long productId) {
         log.info("Adding product with ID: {} to order ID: {}", productId, orderId);
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order not found"));
         log.debug("Order found with ID: {}. Current products: {}", orderId, order.getProducts());
 
-        ResponseEntity<List<ProductDto>> clientResponseEntity = productClient.getProducts(token);
-        String clientPort = clientResponseEntity.getHeaders().get("Server-Port").get(0);
-
-        List<ProductDto> productDtoList = clientResponseEntity.getBody();
-        Set<Long> productIdSet = productDtoList.stream()
-                .map(ProductDto::getProductId)
-                .collect(Collectors.toSet());
-        log.debug("Available products from product client: {}", productIdSet);
-
-        if (!productIdSet.contains(productId)) {
-            log.error("Product ID: {} not found in available products", productId);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product not found");
-        }
+        validateProductDtoList(order.getProducts().stream().map(OrderProduct::getProductId).toList(), products);
 
         order.getProducts().add(OrderProduct.builder()
                 .productId(productId)
                 .order(order)
                 .build());
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
         log.info("Product ID: {} added to order ID: {}.", productId, orderId);
-
-        return clientPort;
+        return createOrderResponseDto(savedOrder);
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "orders", key = "#orderId")
     @Override
     public OrderResponseDto getOrderById(Long orderId) {
         log.info("Retrieving order by ID: {}", orderId);
 
         List<Integer> productIdList = orderProductRepository.findAllProductIdByOrderId(orderId);
+        if (productIdList.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
+        }
         log.debug("Products found for order ID {}: {}", orderId, productIdList);
 
         return new OrderResponseDto(orderId, productIdList);
@@ -125,5 +110,25 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         log.info("All requested product IDs are valid.");
+    }
+
+    private List<OrderProduct> createOrderProduct(Order order, List<Long> productIds) {
+        List<OrderProduct> orderProductList = new ArrayList<>();
+        for (Long productRequestId : productIds) {
+            OrderProduct orderProduct = OrderProduct.builder()
+                    .order(order)
+                    .productId(productRequestId)
+                    .build();
+            orderProductList.add(orderProduct);
+        }
+        return orderProductRepository.saveAll(orderProductList);
+    }
+
+    private OrderResponseDto createOrderResponseDto (Order order) {
+        List<Integer> productIdList = order.getProducts().stream()
+                .map(OrderProduct::getProductId)
+                .map(Long::intValue)
+                .collect(Collectors.toList());
+        return new OrderResponseDto(order.getOrderId(), productIdList);
     }
 }

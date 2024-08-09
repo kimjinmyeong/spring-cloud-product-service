@@ -2,10 +2,11 @@ package com.sparta.msa_exam.dto;
 
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
-public class OrderResponseDto {
+public class OrderResponseDto implements Serializable {
     private Long orderId;
     private List<Integer> productIds;
 
