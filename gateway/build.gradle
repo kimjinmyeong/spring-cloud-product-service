@@ -27,6 +27,7 @@ dependencies {
 	implementation 'io.github.openfeign:feign-micrometer'
 	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
 
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'io.jsonwebtoken:jjwt:0.12.6'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
