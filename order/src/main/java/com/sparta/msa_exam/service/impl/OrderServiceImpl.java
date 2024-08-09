@@ -1,6 +1,5 @@
 package com.sparta.msa_exam.service.impl;
 
-import com.sparta.msa_exam.client.ProductClient;
 import com.sparta.msa_exam.dto.OrderResponseDto;
 import com.sparta.msa_exam.dto.ProductDto;
 import com.sparta.msa_exam.entity.Order;

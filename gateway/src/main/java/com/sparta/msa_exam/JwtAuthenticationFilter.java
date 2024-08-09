@@ -1,14 +1,13 @@
 package com.sparta.msa_exam;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
+import com.sparta.msa_exam.util.JwtUtil;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,7 @@ import javax.crypto.SecretKey;
 
 @Slf4j
 @Component
-public class JwtAuthenticationFilter implements GlobalFilter {
+public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     @Value("${service.jwt.secret-key}")
     private String secretKey;
@@ -41,14 +40,14 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 
         // Extract Token
         String authorizationHeader = request.getHeaders().getFirst("Authorization");
-        if (!extractToken(authorizationHeader)) {
+        if (!JwtUtil.extractToken(authorizationHeader)) {
             log.warn("Missing or invalid Authorization header for path: {}", path);
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
 
         // Validate Token
-        if (!validateToken(authorizationHeader, key)) {
+        if (!JwtUtil.validateToken(authorizationHeader, key)) {
             log.warn("Token validation failed for path: {}", path);
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
@@ -58,26 +57,8 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         return chain.filter(exchange);
     }
 
-    private boolean extractToken(String authorizationHeader) {
-        boolean valid = authorizationHeader != null && authorizationHeader.startsWith("Bearer ");
-        if (valid) {
-            log.debug("Extracted token from Authorization header");
-        } else {
-            log.debug("Failed to extract token from Authorization header");
-        }
-        return valid;
-    }
-
-    private boolean validateToken(String authorizationHeader, SecretKey key) {
-        try {
-            String token = authorizationHeader.substring(7);
-            Jws<Claims> jwsClaims = Jwts.parser()
-                    .verifyWith(key)
-                    .build().parseSignedClaims(token);
-            return true;
-        } catch (Exception e) {
-            log.error("Exception during token validation: {}", e.getMessage(), e);
-            return false;
-        }
+    @Override
+    public int getOrder() {
+        return HIGHEST_PRECEDENCE;
     }
 }
