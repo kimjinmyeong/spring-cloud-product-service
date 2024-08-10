@@ -1,4 +1,4 @@
-package com.sparta.msa_exam;
+package com.sparta.msa_exam.filter;
 
 import com.sparta.msa_exam.util.JwtUtil;
 import io.jsonwebtoken.io.Decoders;
