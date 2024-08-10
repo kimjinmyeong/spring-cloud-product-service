@@ -1,4 +1,4 @@
-package com.sparta.msa_exam;
+package com.sparta.msa_exam.filter;
 
 import com.sparta.msa_exam.client.AuthClient;
 import io.jsonwebtoken.Claims;
@@ -19,6 +19,14 @@ import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
 
+/**
+ * A global filter for the gateway that checks if a user is registered
+ * by verifying the user ID in the JWT token present in the request.
+ * <p>
+ * The filter extracts the user ID from the JWT, then uses the WebClient
+ * to make a request to the 'auth' server to validate whether the
+ * user is registered.
+ */
 @Component
 @Slf4j
 public class CheckUserRegisterFilter implements GlobalFilter, Ordered {

@@ -8,12 +8,14 @@ import com.sparta.msa_exam.dto.ProductDto;
 import com.sparta.msa_exam.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/order")
 @RequiredArgsConstructor
@@ -29,7 +31,9 @@ public class OrderController {
         ResponseEntity<List<ProductDto>> clientResponseEntity = productClient.getProducts(token);
         List<ProductDto> products = clientResponseEntity.getBody();
         orderService.createOrder(products, token, orderRequestDto.getOrderName(), orderRequestDto.getProductIds());
+
         String clientPort = clientResponseEntity.getHeaders().get("Server-Port").get(0);
+        log.debug("Received Server-Port by product server: {}", clientPort);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).header("Server-Port", clientPort).build();
     }
 
@@ -39,7 +43,9 @@ public class OrderController {
         ResponseEntity<List<ProductDto>> clientResponseEntity = productClient.getProducts(token);
         List<ProductDto> products = clientResponseEntity.getBody();
         orderService.addProductToOrder(products, token, orderId, requestDto.getProductId());
+
         String clientPort = clientResponseEntity.getHeaders().get("Server-Port").get(0);
+        log.debug("Received Server-Port by product server: {}", clientPort);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).header("Server-Port", clientPort).build();
     }
 

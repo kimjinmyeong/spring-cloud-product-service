@@ -30,7 +30,7 @@
                   {
                     "enabled": true,
                     "name": "user_id",
-                    "value": "1"
+                    "value": "3"
                   }
                 ]
               },
@@ -42,7 +42,7 @@
               "path": "/auth/signIn"
             },
             "id": "b5b8b2bd-5834-49c5-8940-44bf9280177c",
-            "name": "Auth - SignIn",
+            "name": "Auth - signIn",
             "headers": [
               {
                 "enabled": true,
@@ -50,6 +50,84 @@
                 "value": "Bearer "
               }
             ]
+          }
+        },
+        {
+          "entity": {
+            "type": "Request",
+            "method": {
+              "requestBody": true,
+              "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+              "name": "POST"
+            },
+            "body": {
+              "formBody": {
+                "overrideContentType": true,
+                "encoding": "application/x-www-form-urlencoded",
+                "items": []
+              },
+              "bodyType": "Text",
+              "textBody": "{\n  \"userId\" : 3\n}"
+            },
+            "uri": {
+              "query": {
+                "delimiter": "&",
+                "items": []
+              },
+              "scheme": {
+                "name": "http",
+                "version": "V11"
+              },
+              "host": "localhost:19091",
+              "path": "/auth/signUp"
+            },
+            "id": "1267f7c8-9dbb-47e4-b73c-a3d7dc967200",
+            "name": "Auth - signUp",
+            "headers": [
+              {
+                "enabled": true,
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "entity": {
+            "type": "Request",
+            "method": {
+              "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+              "name": "GET"
+            },
+            "body": {
+              "formBody": {
+                "overrideContentType": true,
+                "encoding": "application/x-www-form-urlencoded",
+                "items": []
+              },
+              "bodyType": "Text"
+            },
+            "uri": {
+              "query": {
+                "delimiter": "&",
+                "items": [
+                  {
+                    "enabled": true,
+                    "name": "userId",
+                    "value": "1"
+                  }
+                ]
+              },
+              "scheme": {
+                "name": "http",
+                "version": "V11"
+              },
+              "host": "localhost:19095",
+              "path": "/auth/validate"
+            },
+            "id": "46776252-aa79-4faa-9f28-8ccfa5170dd6",
+            "name": "Auth - validate",
+            "headers": []
           }
         },
         {
@@ -92,7 +170,7 @@
               {
                 "enabled": true,
                 "name": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxMDU5MjQsImV4cCI6MTcyMzEwOTUyNH0.g-qubkkHIrhFRTYhNHhWiu2o4HpdH5y1tfyCW_T0AXa3wHFFLJix2FyT9JeRrq9Hc1H6Pw44eOein84Rgc2ZSw"
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMyIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMyMDM5NzEsImV4cCI6MTcyMzIxMTE3MX0.xS8IHUKn1phxdopoPh6dMEyiDiPxU1EEAXRR2U2hrcBWPL3xww30MSn8oeQjeso7nCsqibN1XWueBYzGduc1GQ"
               }
             ]
           }
@@ -130,7 +208,7 @@
               {
                 "enabled": true,
                 "name": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxMDU5MjQsImV4cCI6MTcyMzEwOTUyNH0.g-qubkkHIrhFRTYhNHhWiu2o4HpdH5y1tfyCW_T0AXa3wHFFLJix2FyT9JeRrq9Hc1H6Pw44eOein84Rgc2ZSw"
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxOTg2OTMsImV4cCI6MTcyMzIwNTg5M30.kUCbRNGMvmfmdNDHAScCzM-iWboUn_jWJq5y8AL356qzsRJtQ6zPlwXYSC74YpfgU7gn1wUDE9NqFFaiExbrKQ"
               }
             ]
           }
@@ -150,7 +228,7 @@
                 "items": []
               },
               "bodyType": "Text",
-              "textBody": "{\n \t \"product_id\" : 52\n}"
+              "textBody": "{\n \t \"product_id\" : 1\n}"
             },
             "uri": {
               "query": {
@@ -170,7 +248,7 @@
               {
                 "enabled": true,
                 "name": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxMDU5MjQsImV4cCI6MTcyMzEwOTUyNH0.g-qubkkHIrhFRTYhNHhWiu2o4HpdH5y1tfyCW_T0AXa3wHFFLJix2FyT9JeRrq9Hc1H6Pw44eOein84Rgc2ZSw"
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMyIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMyMDM5NzEsImV4cCI6MTcyMzIxMTE3MX0.xS8IHUKn1phxdopoPh6dMEyiDiPxU1EEAXRR2U2hrcBWPL3xww30MSn8oeQjeso7nCsqibN1XWueBYzGduc1GQ"
               },
               {
                 "enabled": true,
@@ -215,7 +293,7 @@
               {
                 "enabled": true,
                 "name": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxMDU5MjQsImV4cCI6MTcyMzEwOTUyNH0.g-qubkkHIrhFRTYhNHhWiu2o4HpdH5y1tfyCW_T0AXa3wHFFLJix2FyT9JeRrq9Hc1H6Pw44eOein84Rgc2ZSw"
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxOTg2OTMsImV4cCI6MTcyMzIwNTg5M30.kUCbRNGMvmfmdNDHAScCzM-iWboUn_jWJq5y8AL356qzsRJtQ6zPlwXYSC74YpfgU7gn1wUDE9NqFFaiExbrKQ"
               },
               {
                 "enabled": true,
@@ -258,7 +336,7 @@
               {
                 "enabled": true,
                 "name": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMSIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMxMDU5MjQsImV4cCI6MTcyMzEwOTUyNH0.g-qubkkHIrhFRTYhNHhWiu2o4HpdH5y1tfyCW_T0AXa3wHFFLJix2FyT9JeRrq9Hc1H6Pw44eOein84Rgc2ZSw"
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoiMyIsImlzcyI6ImF1dGgiLCJpYXQiOjE3MjMyMDM0NDgsImV4cCI6MTcyMzIxMDY0OH0.CyavNLjuztvgUKnrtbG4BU7T44icbO8GhcrH7cfaZzwbWCwu8cc4Al-Cs1WuLeocMOLodKF7wdjiEiVQSqfydQ"
               }
             ]
           }
