@@ -36,34 +36,46 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String signIn(String userId) {
+        log.debug("Entering signIn method with userId: {}", userId);
+
         if (checkUserExists(userId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A user with this username not exists.");
+            log.warn("User with userId: {} not found.", userId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A user with this username does not exist.");
         }
+
         SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(key));
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .claim("user_id", userId)
                 .issuer(issuer)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessExpiration))
                 .signWith(secretKey, Jwts.SIG.HS512)
                 .compact();
+
+        log.debug("JWT token generated for userId: {}", userId);
+        return token;
     }
 
     @Override
     @Transactional
     public void register(RegisterRequestDto registerRequestDto) {
         String userId = registerRequestDto.getUserId();
-        log.info("register");
+        log.debug("Entering register method with userId: {}", userId);
+
         if (!checkUserExists(userId)) {
+            log.warn("User with userId: {} already exists.", userId);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A user with this username already exists.");
         }
 
         User user = new User(userId);
         userRepository.save(user);
+
+        log.info("User with userId: {} successfully registered.", userId);
     }
 
     @Override
     public boolean checkUserExists(String userId) {
+        log.debug("Checking existence of user with userId: {}", userId);
         return userRepository.findByUserId(userId).isEmpty();
     }
 }

@@ -40,14 +40,6 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.save(order);
         log.info("Order created with ID: {}", savedOrder.getOrderId());
 
-        List<OrderProduct> orderProductList = new ArrayList<>();
-        for (Long productRequestId : productRequestIds) {
-            OrderProduct orderProduct = OrderProduct.builder()
-                    .order(savedOrder)
-                    .productId(productRequestId)
-                    .build();
-            orderProductList.add(orderProduct);
-        }
         List<OrderProduct> createdOrderProductList = createOrderProduct(savedOrder, productRequestIds);
         savedOrder.setProducts(createdOrderProductList);
         Order updatedOrder = orderRepository.save(savedOrder);
