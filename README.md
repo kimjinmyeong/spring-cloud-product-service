@@ -20,6 +20,8 @@ The project is built using the following technologies:
 - **Redis**
 
 ## Microservices Architecture
+![image](https://github.com/user-attachments/assets/a1eebc76-1f24-4fed-8d37-3417ac2df697)
+
 
 The project consists of five microservices, each with its specific role and responsibilities:
 
