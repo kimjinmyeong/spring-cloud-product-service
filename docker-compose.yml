@@ -36,7 +36,7 @@ services:
       - app_network
 
 volumes:
-  postgresql_data:
+  mysql_data:
     driver: local
   redis_data:
     driver: local
