@@ -40,8 +40,6 @@ volumes:
     driver: local
   redis_data:
     driver: local
-  mysql_data:
-    driver: local
 
 networks:
   app_network:
